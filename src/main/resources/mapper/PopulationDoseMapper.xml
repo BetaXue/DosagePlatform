@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.evision.dosage.mapper.PopulationDoseMapper">
+
+    <select id="getAllPopulationDose" resultType="com.evision.dosage.pojo.entity.PopulationDoseEntity">
+        select
+        *
+        from
+        population_dose where
+        disabled = 1
+        <choose>
+            <when test="incloudDel==null or incloudDel==0">
+                and deleted = #{incloudDel}
+            </when>
+            <otherwise>
+                or deleted = #{incloudDel}
+            </otherwise>
+        </choose>
+        
+        ORDER BY
+        orders asc
+    </select>
+
+    <select id="selectByCategory" resultType="com.evision.dosage.pojo.entity.PopulationDoseEntity">
+        select
+        id,
+        category,
+        annual_effective_dose,
+        sub_item_ratio,
+        total_dose_ratio
+        from
+        population_dose where
+        disabled = 1 and deleted = 0
+        and category = #{category}
+    </select>
+
+
+    <select id="getHistory" resultType="com.evision.dosage.pojo.entity.PopulationDoseEntity">
+        select
+        *
+        from
+        population_dose where
+        disabled = 0 and deleted = 0
+        and category = #{category}
+    </select>
+
+</mapper>

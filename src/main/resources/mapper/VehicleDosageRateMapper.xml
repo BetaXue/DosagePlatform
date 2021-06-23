@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.evision.dosage.mapper.vehicle.VehicleDosageRateMapper">
+    <resultMap id="BaseResultMap" type="com.evision.dosage.pojo.entity.vehicle.VehicleDosageRateEntity">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="vehicle_category" property="vehicleCategory" jdbcType="VARCHAR"/>
+        <result column="route" property="route" jdbcType="VARCHAR"/>
+        <result column="station" property="station" jdbcType="VARCHAR"/>
+        <result column="dosage_rate_one" property="dosageRateOne" jdbcType="DECIMAL"/>
+        <result column="dosage_rate_two" property="dosageRateTwo" jdbcType="DECIMAL"/>
+        <result column="dosage_rate_three" property="dosageRateThree" jdbcType="DECIMAL"/>
+        <result column="dosage_rate_four" property="dosageRateFour" jdbcType="DECIMAL"/>
+        <result column="dosage_rate_five" property="dosageRateFive" jdbcType="DECIMAL"/>
+        <result column="dosage_rate_six" property="dosageRateSix" jdbcType="DECIMAL"/>
+        <result column="dosage_rate_seven" property="dosageRateSeven" jdbcType="DECIMAL"/>
+        <result column="dosage_rate_eight" property="dosageRateEight" jdbcType="DECIMAL"/>
+        <result column="dosage_rate_nine" property="dosageRateNine" jdbcType="DECIMAL"/>
+        <result column="dosage_rate_ten" property="dosageRateTen" jdbcType="DECIMAL"/>
+        <result column="dosage_rate_average" property="dosageRateAverage" jdbcType="DECIMAL"/>
+        <result column="dosage_rate_min" property="dosageRateMin" jdbcType="DECIMAL"/>
+        <result column="dosage_rate_max" property="dosageRateMax" jdbcType="DECIMAL"/>
+        <result column="calibration_factor" property="calibrationFactor" jdbcType="DECIMAL"/>
+        <result column="calibration_dosage_rate_average" property="calibrationDosageRateAverage" jdbcType="DECIMAL"/>
+        <result column="calibration_dosage_rate_min" property="calibrationDosageRateMin" jdbcType="DECIMAL"/>
+        <result column="calibration_dosage_rate_max" property="calibrationDosageRateMax" jdbcType="DECIMAL"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="disabled" property="disabled" jdbcType="INTEGER"/>
+        <result column="deleted" property="deleted" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,
+        vehicle_category,
+        route,
+        station,
+        dosage_rate_one,
+        dosage_rate_two,
+        dosage_rate_three,
+        dosage_rate_four,
+        dosage_rate_five,
+        dosage_rate_six,
+        dosage_rate_seven,
+        dosage_rate_eight,
+        dosage_rate_nine,
+        dosage_rate_ten,
+        dosage_rate_average,
+        dosage_rate_min,
+        dosage_rate_max,
+        calibration_factor,
+        calibration_dosage_rate_average,
+        calibration_dosage_rate_min,
+        calibration_dosage_rate_max,
+        create_time,
+        update_time,
+        user_id,
+        disabled,
+        deleted
+    </sql>
+    <select id="queryValidData" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM vehicle_dosage_rate
+        WHERE DISABLED = 1
+    </select>
+    <select id="queryValidDataForCompute" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM vehicle_dosage_rate
+        WHERE DISABLED = 1 AND deleted = 0
+    </select>
+    <insert id="add" parameterType="com.evision.dosage.pojo.entity.vehicle.VehicleDosageRateEntity">
+        INSERT vehicle_dosage_rate (
+        vehicle_category,
+        route,
+        station,
+        dosage_rate_one,
+        dosage_rate_two,
+        dosage_rate_three,
+        dosage_rate_four,
+        dosage_rate_five,
+        dosage_rate_six,
+        dosage_rate_seven,
+        dosage_rate_eight,
+        dosage_rate_nine,
+        dosage_rate_ten,
+        dosage_rate_average,
+        dosage_rate_min,
+        dosage_rate_max,
+        calibration_factor,
+        calibration_dosage_rate_average,
+        calibration_dosage_rate_min,
+        calibration_dosage_rate_max,
+        create_time,
+        update_time,
+        user_id,
+        disabled,
+        deleted
+        ) VALUES (
+        #{vehicleCategory},
+        #{route},
+        #{station},
+        #{dosageRateOne},
+        #{dosageRateTwo},
+        #{dosageRateThree},
+        #{dosageRateFour},
+        #{dosageRateFive},
+        #{dosageRateSix},
+        #{dosageRateSeven},
+        #{dosageRateEight},
+        #{dosageRateNine},
+        #{dosageRateTen},
+        #{dosageRateAverage},
+        #{dosageRateMin},
+        #{dosageRateMax},
+        #{calibrationFactor},
+        #{calibrationDosageRateAverage},
+        #{calibrationDosageRateMin},
+        #{calibrationDosageRateMax},
+        sysdate(),
+        sysdate(),
+        #{userId},
+        #{disabled},
+        #{deleted}
+        )
+    </insert>
+    <select id="queryValidByKeys" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM vehicle_dosage_rate
+        WHERE disabled = 1 AND vehicle_category = #{vehicleCategory} AND route = #{route} AND station = #{station}
+    </select>
+    <update id="updateDisabled" parameterType="com.evision.dosage.pojo.entity.vehicle.VehicleDosageRateEntity">
+        UPDATE vehicle_dosage_rate SET disabled = 0
+        WHERE vehicle_category = #{vehicleCategory} AND route = #{route} AND station = #{station} AND disabled = 1
+    </update>
+    <update id="delete" parameterType="com.evision.dosage.pojo.entity.vehicle.VehicleDosageRateEntity">
+        UPDATE vehicle_dosage_rate SET deleted = 1
+        WHERE vehicle_category = #{vehicleCategory} AND route = #{route} AND station = #{station}  AND disabled = 1
+    </update>
+    <select id="getHistory" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM vehicle_dosage_rate
+        WHERE disabled = 0 AND deleted = 0 AND vehicle_category = #{vehicleCategory} AND route = #{route} AND station = #{station}
+    </select>
+    <select id="queryValidDataFowWeb" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM vehicle_dosage_rate
+        WHERE disabled = 1 AND ( vehicle_category like #{queryName} OR route like #{queryName} OR station like #{queryName} )
+        <choose>
+            <when test="incloudDel==null or incloudDel==0">
+                and deleted = #{incloudDel}
+            </when>
+            <otherwise>
+                or deleted = #{incloudDel}
+            </otherwise>
+        </choose>
+        order by ${orderField} ${isAsc}
+    </select>
+    <select id="getDataById" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM vehicle_dosage_rate
+        WHERE id = #{id}
+    </select>
+</mapper>

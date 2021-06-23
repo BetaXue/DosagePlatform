@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.evision.dosage.mapper.PubDomesticFlightMapper">
+    <resultMap id="BaseResultMap" type="com.evision.dosage.pojo.entity.PubDomesticFlightEntity">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="departure_airport" property="departureAirport" jdbcType="VARCHAR"/>
+        <result column="destination_airport" property="destinationAirport" jdbcType="VARCHAR"/>
+        <result column="avg_fly" property="avgFly" jdbcType="REAL"/>
+        <result column="fly_time" property="flyTime" jdbcType="INTEGER"/>
+        <result column="effective_dose" property="effectiveDose" jdbcType="REAL"/>
+        <result column="effective_dose_rate" property="effectiveDoseRate" jdbcType="REAL"/>
+        <result column="disabled" property="disabled" jdbcType="INTEGER"/>
+        <result column="deleted" property="deleted" jdbcType="INTEGER"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <select id="selectAll" resultType="com.evision.dosage.pojo.entity.PubDomesticFlightEntity">
+        select
+         *
+        from pub_domestic_flight where disabled = 1
+        <choose>
+            <when test="deleted==null or deleted==0">
+                and deleted = #{deleted}
+            </when>
+            <otherwise>
+                or deleted = #{deleted}
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="selectHistory" resultType="com.evision.dosage.pojo.entity.PubDomesticFlightEntity">
+        select
+         *
+        from pub_domestic_flight where deleted = #{deleted} and disabled = #{disabled} and departure_airport = #{departureAirport} and destination_airport = #{destinationAirport}
+    </select>
+
+</mapper>

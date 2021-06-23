@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.evision.dosage.mapper.vehicle.VehicleDosageMapper">
+    <resultMap id="BaseResultMap" type="com.evision.dosage.pojo.entity.vehicle.VehicleDosageEntity">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="data_category" property="dataCategory" jdbcType="VARCHAR"/>
+        <result column="location" property="location" jdbcType="VARCHAR"/>
+        <result column="road_name" property="roadName" jdbcType="VARCHAR"/>
+        <result column="route" property="route" jdbcType="VARCHAR"/>
+        <result column="driving_state" property="drivingState" jdbcType="VARCHAR"/>
+        <result column="monitor_number" property="monitorNumber" jdbcType="INTEGER"/>
+        <result column="measure_result_max_range" property="measureResultMaxRange" jdbcType="VARCHAR"/>
+        <result column="measure_result_min_range" property="measureResultMinRange" jdbcType="VARCHAR"/>
+        <result column="measure_result_average_range" property="measureResultAverageRange" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="disabled" property="disabled" jdbcType="INTEGER"/>
+        <result column="deleted" property="deleted" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,
+        data_category,
+        location,
+        road_name,
+        route,
+        driving_state,
+        monitor_number,
+        measure_result_max_range,
+        measure_result_min_range,
+        measure_result_average_range,
+        create_time,
+        update_time,
+        user_id,
+        disabled,
+        deleted
+    </sql>
+    <sql id="Base_Column_List_1">
+        data_category,
+        location,
+        road_name,
+        route,
+        driving_state,
+        monitor_number,
+        measure_result_max_range,
+        measure_result_min_range,
+        measure_result_average_range,
+        create_time,
+        update_time,
+        user_id,
+        disabled,
+        deleted
+    </sql>
+    <select id="queryValidData" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM vehicle_dosage
+        WHERE DISABLED = 1
+    </select>
+    <insert id="add" parameterType="com.evision.dosage.pojo.entity.vehicle.VehicleDosageEntity">
+        INSERT vehicle_dosage (
+        <include refid="Base_Column_List_1"/>
+        ) VALUES (
+        #{dataCategory},
+        #{location},
+        #{roadName},
+        #{route},
+        #{drivingState},
+        #{monitorNumber},
+        #{measureResultMaxRange},
+        #{measureResultMinRange},
+        #{measureResultAverageRange},
+        sysdate(),
+        sysdate(),
+        #{userId},
+        #{disabled},
+        #{deleted}
+        )
+    </insert>
+    <select id="queryValidByKeys" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM vehicle_dosage
+        WHERE disabled = 1 AND data_category = #{dataCategory}
+        <if test="route != null and route != ''">
+            AND route = #{route}
+        </if>
+        <if test="location != null and location != ''">
+            AND location = #{location}
+        </if>
+        <if test="roadName != null and roadName != ''">
+            AND road_name = #{roadName}
+        </if>
+    </select>
+    <update id="updateDisabled" parameterType="com.evision.dosage.pojo.entity.vehicle.VehicleDosageEntity">
+        UPDATE vehicle_dosage SET disabled = 0
+        WHERE data_category = #{dataCategory} AND route = #{route} AND disabled = 1
+    </update>
+    <update id="delete" parameterType="com.evision.dosage.pojo.entity.vehicle.VehicleDosageEntity">
+        UPDATE vehicle_dosage SET deleted = 1
+        WHERE data_category = #{dataCategory} AND route = #{route} AND disabled = 1
+    </update>
+    <select id="getHistory" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM vehicle_dosage
+        WHERE disabled = 0 AND deleted = 0 AND data_category = #{dataCategory} AND route = #{route}
+    </select>
+    <select id="queryValidDataFowWeb" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM vehicle_dosage
+        WHERE disabled = 1 AND ( data_category like #{queryName} OR route like #{queryName} )
+        <choose>
+            <when test="incloudDel==null or incloudDel==0">
+                and deleted = #{incloudDel}
+            </when>
+            <otherwise>
+                or deleted = #{incloudDel}
+            </otherwise>
+        </choose>
+        order by ${orderField} ${isAsc}
+    </select>
+    <select id="getDataById" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM vehicle_dosage
+        WHERE id = #{id}
+    </select>
+</mapper>

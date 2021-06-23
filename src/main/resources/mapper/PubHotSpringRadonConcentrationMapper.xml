@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.evision.dosage.mapper.PubHotSpringRadonConcentrationMapper">
+    <resultMap id="BaseResultMap" type="com.evision.dosage.pojo.entity.PubHotSpringRadonConcentrationEntity">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="hot_spring" property="hotSpring" jdbcType="VARCHAR"/>
+        <result column="hot_spring_radon_concentration" property="hotSpringRadonConcentration" jdbcType="VARCHAR"/>
+        <result column="disabled" property="disabled" jdbcType="INTEGER"/>
+        <result column="deleted" property="deleted" jdbcType="INTEGER"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <select id="selectAll" resultType="com.evision.dosage.pojo.entity.PubHotSpringRadonConcentrationEntity">
+        select
+         *
+        from pub_hot_spring_radon_concentration where disabled = #{disabled}
+        <choose>
+            <when test="deleted==null or deleted==0">
+                and deleted = #{deleted}
+            </when>
+            <otherwise>
+                or deleted = #{deleted}
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="selectHistory" resultType="com.evision.dosage.pojo.entity.PubHotSpringRadonConcentrationEntity">
+        select
+         *
+        from pub_hot_spring_radon_concentration where disabled = #{disabled} and deleted = 0 and hot_spring = #{hotSpring}
+    </select>
+    <select id="getDataById" resultMap="BaseResultMap">
+        SELECT * FROM pub_hot_spring_radon_concentration
+        WHERE id = #{id}
+    </select>
+
+</mapper>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.evision.dosage.mapper.UniverseRayMapper">
+    <select id="selectGroupByAreaCode" resultType="com.evision.dosage.pojo.entity.UniverseRay">
+       SELECT
+            area_code,
+            TRUNCATE ( AVG( ionization_dose_rate ), 2 ) AS ionization_dose_rate,
+	        TRUNCATE ( AVG( neutron_dose_rate ), 2 ) AS neutron_dose_rate,
+	        TRUNCATE ( AVG( cosmogenic_dose_rate ), 2 ) AS cosmogenic_dose_rate,
+	        TRUNCATE ( AVG( total_dose_rate ), 2 ) AS total_dose_rate
+        FROM
+            universe_ray
+        WHERE
+            in_bj = "1"
+        GROUP BY
+            area_code
+    </select>
+
+</mapper>

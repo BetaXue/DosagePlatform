@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.evision.dosage.mapper.AverageRadonMapper">
+    <resultMap id="BaseResultMap" type="com.evision.dosage.pojo.entity.AverageRadon">
+        <result column="region" property="region" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="average_radon" property="averageRadon" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER" />
+        <result column="disabled" property="disabled" jdbcType="INTEGER" />
+        <result column="deleted" property="deleted" jdbcType="INTEGER" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        region,
+        average_radon,
+        create_time,
+        update_time,
+        user_id,
+        disabled,
+        deleted
+    </sql>
+    <select id="getAverageRadons" parameterType="com.evision.dosage.pojo.entity.AverageRadon"
+            resultMap="BaseResultMap">
+        SELECT id, <include refid="Base_Column_List"/> FROM average_radon_concentration WHERE DISABLED = 1
+        <choose>
+            <when test="incloudDel==null or incloudDel==0">
+                and deleted = #{incloudDel}
+            </when>
+            <otherwise>
+                or deleted = #{incloudDel}
+            </otherwise>
+        </choose>
+    </select>
+
+    <insert id="insertAverageRadons" parameterType="java.util.List">
+        INSERT INTO average_radon_concentration  (
+        <include refid="Base_Column_List"/>
+        ) VALUES
+        <foreach collection="averageRadons" item="item" index="index" separator=",">
+            (
+            #{item.region},
+            #{item.averageRadon},
+            sysdate(),
+            sysdate(),
+            #{item.userId},
+            #{item.disabled},
+            #{item.deleted}
+            )
+        </foreach>
+    </insert>
+
+    <insert id="insertAverageRadon" parameterType="com.evision.dosage.pojo.entity.AverageRadon">
+        INSERT INTO average_radon_concentration  (
+        <include refid="Base_Column_List"/>
+        ) VALUES (
+        #{averageRadon.region},
+        #{averageRadon.averageRadon},
+        sysdate(),
+        sysdate(),
+        #{averageRadon.userId},
+        #{averageRadon.disabled},
+        #{averageRadon.deleted}
+        )
+    </insert>
+
+    <update id="updateAverageRadon" parameterType="com.evision.dosage.pojo.entity.AverageRadon">
+        UPDATE average_radon_concentration SET disabled = 0 WHERE region = #{averageRadon.region} AND disabled = 1
+    </update>
+
+    <select id="getHistory" resultMap="BaseResultMap">
+        SELECT id, <include refid="Base_Column_List"/> FROM average_radon_concentration
+        WHERE disabled = 0 AND deleted = 0 AND region = #{region} ORDER BY update_time DESC
+    </select>
+
+    <update id="deleteAverageRadon" parameterType="com.evision.dosage.pojo.entity.AverageRadon">
+        UPDATE average_radon_concentration SET deleted = 1 WHERE region = #{averageRadon.region} AND disabled = 1
+    </update>
+
+</mapper>

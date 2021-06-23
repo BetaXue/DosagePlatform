@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.evision.dosage.mapper.UserRoleRelationshipMapper">
+
+    <sql id="Base_Column_List">
+        user_id,
+        role_id,
+        creat_time,
+        valid,
+        update_time
+    </sql>
+
+    <insert id="insert" parameterType="com.evision.dosage.pojo.entity.user.UserRoleRelationshipEntity">
+        INSERT user_role_relationship (
+        <include refid="Base_Column_List"/>
+        ) VALUES (
+        #{userId},
+        #{roleId},
+        sysdate(),
+        #{valid},
+        sysdate()
+        )
+    </insert>
+    <select id="queryRoleByUserId" resultType="int">
+        select role_id from user_role_relationship
+        where user_id = #{userId}
+    </select>
+</mapper>

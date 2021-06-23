@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.evision.dosage.mapper.RolePermissionRelationshipMapper">
+
+    <sql id="Base_Column_List">
+        role_id,
+        permission_id,
+        creat_time,
+        update_time,
+        valid
+    </sql>
+
+    <insert id="insert" parameterType="com.evision.dosage.pojo.entity.user.RolePermissionRelationshipEntity">
+        INSERT role_permission_relationship (
+        <include refid="Base_Column_List"/>
+        ) VALUES (
+        #{roleId},
+        #{permissionId},
+        sysdate(),
+        sysdate(),
+        #{valid}
+        )
+    </insert>
+    <delete id="deleteRole" parameterType="com.evision.dosage.pojo.entity.user.RolePermissionRelationshipEntity">
+        DELETE role_permission_relationship
+        where role_id = #{roleId} and permission_id = #{permissionId}
+    </delete>
+    <select id="queryPermissionsByRoleId" resultType="com.evision.dosage.pojo.entity.user.PermissionEntity">
+        select
+        p.*
+        from role_permisson_relationship s
+        left join permission p
+        on s.permission_id = p.permission_id
+        where s.role_id = #{roleId} and p.valid = 1
+        GROUP BY p.permission_id
+    </select>
+</mapper>

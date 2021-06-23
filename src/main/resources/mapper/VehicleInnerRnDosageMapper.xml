@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.evision.dosage.mapper.vehicle.VehicleInnerRnDosageMapper">
+    <resultMap id="BaseResultMap" type="com.evision.dosage.pojo.entity.vehicle.VehicleInnerRnDosageEntity">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="data_category" property="dataCategory" jdbcType="VARCHAR"/>
+        <result column="location" property="location" jdbcType="VARCHAR"/>
+        <result column="route" property="route" jdbcType="VARCHAR"/>
+        <result column="monitor_number" property="monitorNumber" jdbcType="INTEGER"/>
+        <result column="measure_result_max" property="measureResultMax" jdbcType="DECIMAL"/>
+        <result column="measure_result_min" property="measureResultMin" jdbcType="DECIMAL"/>
+        <result column="measure_result_average" property="measureResultAverage" jdbcType="DECIMAL"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="disabled" property="disabled" jdbcType="INTEGER"/>
+        <result column="deleted" property="deleted" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,
+        data_category,
+        location,
+        route,
+        monitor_number,
+        measure_result_max,
+        measure_result_min,
+        measure_result_average,
+        create_time,
+        update_time,
+        user_id,
+        disabled,
+        deleted
+    </sql>
+    <select id="queryValidData" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM vehicle_inner_rn_dosage
+        WHERE DISABLED = 1
+    </select>
+    <insert id="add" parameterType="com.evision.dosage.pojo.entity.vehicle.VehicleInnerRnDosageEntity">
+        INSERT vehicle_inner_rn_dosage (
+        data_category,
+        location,
+        route,
+        monitor_number,
+        measure_result_max,
+        measure_result_min,
+        measure_result_average,
+        create_time,
+        update_time,
+        user_id,
+        disabled,
+        deleted
+        ) VALUES (
+        #{dataCategory},
+        #{location},
+        #{route},
+        #{monitorNumber},
+        #{measureResultMax},
+        #{measureResultMin},
+        #{measureResultAverage},
+        sysdate(),
+        sysdate(),
+        #{userId},
+        #{disabled},
+        #{deleted}
+        )
+    </insert>
+    <select id="queryValidByKeys" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM vehicle_inner_rn_dosage
+        WHERE disabled = 1 AND data_category = #{dataCategory} AND route = #{route}
+    </select>
+    <update id="updateDisabled" parameterType="com.evision.dosage.pojo.entity.vehicle.VehicleInnerRnDosageEntity">
+        UPDATE vehicle_inner_rn_dosage SET disabled = 0
+        WHERE data_category = #{dataCategory} AND route = #{route} AND disabled = 1
+    </update>
+    <update id="delete" parameterType="com.evision.dosage.pojo.entity.vehicle.VehicleInnerRnDosageEntity">
+        UPDATE vehicle_inner_rn_dosage SET deleted = 1
+        WHERE data_category = #{dataCategory} AND route = #{route} AND disabled = 1
+    </update>
+    <select id="getHistory" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM vehicle_inner_rn_dosage
+        WHERE disabled = 0 AND deleted = 0 AND data_category = #{dataCategory} AND route = #{route}
+    </select>
+    <select id="queryValidDataFowWeb" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM vehicle_inner_rn_dosage
+        WHERE disabled = 1 AND ( data_category like #{queryName} OR route like #{queryName} )
+        <choose>
+            <when test="incloudDel==null or incloudDel==0">
+                and deleted = #{incloudDel}
+            </when>
+            <otherwise>
+                or deleted = #{incloudDel}
+            </otherwise>
+        </choose>
+        order by ${orderField} ${isAsc}
+    </select>
+    <select id="getDataById" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM vehicle_inner_rn_dosage
+        WHERE id = #{id}
+    </select>
+</mapper>

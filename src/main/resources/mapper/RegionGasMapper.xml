@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.evision.dosage.mapper.RegionGasMapper">
+    <resultMap id="BaseResultMap" type="com.evision.dosage.pojo.entity.RegionGas">
+        <result column="region" property="region" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="type" property="type" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="mean" property="mean" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="acquisition_rate" property="acquisitionRate" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="change_range" property="changeRange" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER" />
+        <result column="disabled" property="disabled" jdbcType="INTEGER" />
+        <result column="deleted" property="deleted" jdbcType="INTEGER" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        region,
+        type,
+        mean,
+        acquisition_rate,
+        change_range,
+        create_time,
+        update_time,
+        user_id,
+        disabled,
+        deleted
+    </sql>
+    <select id="getRegionGass" parameterType="java.lang.String"
+            resultMap="BaseResultMap">
+        SELECT id,<include refid="Base_Column_List"/> FROM radon_gas WHERE DISABLED = 1
+        <choose>
+            <when test="incloudDel==null or incloudDel==0">
+                and deleted = #{incloudDel}
+            </when>
+            <otherwise>
+                or deleted = #{incloudDel}
+            </otherwise>
+        </choose>
+        ORDER BY region DESC
+    </select>
+
+    <insert id="insertRegionGass" parameterType="java.util.List">
+        INSERT INTO radon_gas  (
+        <include refid="Base_Column_List"/>
+        ) VALUES
+        <foreach collection="regionGases" item="item" index="index" separator=",">
+            (
+            #{item.region},
+            #{item.type},
+            #{item.mean},
+            #{item.acquisitionRate},
+            #{item.changeRange},
+            sysdate(),
+            sysdate(),
+            #{item.userId},
+            #{item.disabled},
+            #{item.deleted}
+            )
+        </foreach>
+    </insert>
+
+    <insert id="insertRegionGas" parameterType="com.evision.dosage.pojo.entity.RegionGas">
+        INSERT INTO radon_gas  (
+        <include refid="Base_Column_List"/>
+        ) VALUES (
+        #{regionGas.region},
+        #{regionGas.type},
+        #{regionGas.mean},
+        #{regionGas.acquisitionRate},
+        #{regionGas.changeRange},
+        sysdate(),
+        sysdate(),
+        #{regionGas.userId},
+        #{regionGas.disabled},
+        #{regionGas.deleted}
+        )
+    </insert>
+
+    <update id="updateRegionGas" parameterType="com.evision.dosage.pojo.entity.RegionGas">
+        UPDATE radon_gas SET disabled = 0 WHERE region = #{regionGas.region} AND type = #{regionGas.type} AND disabled = 1
+    </update>
+
+    <select id="getHistory" resultMap="BaseResultMap">
+        SELECT id,<include refid="Base_Column_List"/> FROM radon_gas
+        WHERE disabled = 0 AND deleted = 0 AND region = #{region} AND type = #{type} ORDER BY update_time DESC
+    </select>
+
+    <update id="deleteRegionGas" parameterType="com.evision.dosage.pojo.entity.RegionGas">
+        UPDATE radon_gas SET deleted = 1 WHERE region = #{regionGas.region} AND type = #{regionGas.type} AND disabled = 1
+    </update>
+</mapper>

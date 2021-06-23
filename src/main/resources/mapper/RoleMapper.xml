@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.evision.dosage.mapper.RoleMapper">
+
+    <sql id="Base_Column_List">
+        id,
+        role,
+        valid,
+        creat_time,
+        update_time
+    </sql>
+
+    <insert id="insertRole" parameterType="com.evision.dosage.pojo.entity.user.RoleEntity">
+        INSERT role (
+        <include refid="Base_Column_List"/>
+        ) VALUES (
+        #{id},
+        #{role},
+        #{valid},
+        sysdate(),
+        sysdate()
+        )
+    </insert>
+    <delete id="deleteRole" >
+        DELETE role
+        where id = #{roleId}
+    </delete>
+</mapper>

@@ -1,0 +1,98 @@
+{                               
+  "sex":0,									  
+  "age":11,									  
+  "occupation":"外科医生",					  
+  "stayTime": 1.00,							  
+  "xray": {									
+    "chestRight": 1,						  
+    "chestSide": 1,							  
+    "chestDoubleOblique": 1,				  
+    "headRight": 1,                           
+    "headSide": 1,							  
+    "neckRight": 1,							  
+    "neckSide": 1,							  
+    "neckDoubleOblique": 1,					  
+    "thoracicVertebraRight": 1,				  
+    "thoracicVertebraSide": 1,				  
+    "lumbarVertebraRight": 1,				  
+    "lumbarVertebraSide": 1,                  
+    "lumbarVertebraDoubleOblique": 1,         
+    "fiveSenses": 1,                          
+    "pelvis": 1,						      
+    "hip": 1,								  
+    "limbsAndJoints": 1,					  
+    "collarboneAndShoulderJoints": 1,		  
+    "belly": 1,								  
+    "other": 1,								  
+    "chestPerspectiveClinic": 1,			  
+    "chestPerspectivePhysical": 1,			  
+    "bellyPerspective": 1					  
+  },		
+  "dental": {								  
+    "insideTheMouth": 1,					  
+    "hologram": 1,							  
+    "mouthCT": 1							  
+  },
+  "breast": {   							  
+    "headAndTailBit":1, 					  
+    "insideSlope": 1						  
+  },
+  "ct": {									  
+    "head": 1,								  
+    "neck": 1,								  
+    "fiveSenses": 1,						  
+    "chest": 1,								  
+    "belly": 1,								  
+    "thoracicVertebra": 1,					  
+    "lumbarVertebra": 1,					  
+    "pelvisAndHip": 1,						  
+    "pelvicCavity": 1,						  
+    "limps": 1,								  
+    "bloodCTACoronary": 1,					  
+    "bloodCTANeck": 1,						  
+    "bloodCTAPeriphery": 1,					  
+    "other": 1							  
+  },
+  "interventionalRadiology": {				  
+    "cardiovascular": 1,					  
+    "tumor": 1, 							  
+    "nerve": 1,								  
+    "pv": 1,  								  
+    "nonVascular": 1,						  
+    "diagnose": 1,							  
+    "other": 1							  
+  },
+  "medicalApplication": {   				  
+    "diagnosticRadiology": 1,				  
+    "radiotherapy": 1,						  
+    "interventionalRadiology":1,			  
+    "nuclearMedicine": 1,					  
+    "other": 1,								  
+    "dentalRadiology": 1				  
+  },
+  "industrialApplication": {				  
+    "industrial": 1,						  
+    "acceleratorRunning": 1,				  
+    "industrialIrradiation": 1,				  
+    "other": 1,								  
+    "wellLog": 1,							  
+    "radioisotopeProduction": 1			  
+  },
+  "occupationalExposureOther": {  			  
+    "scienceStudy": 1,						  
+    "other": 1,								  
+    "education": 1				  
+  },
+  "publicExposure": {						  
+    "dailyCigarette": 1,					  
+    "yearlyDomesticFlight": 1,				  
+    "yearlyInternationalFlight": 1,			  
+    "dailyBus": 1.00,						  
+    "dailySubway": 1.00,					  
+    "dailyTaxi": 1.00,						  
+    "dailyCar": 1.00,						  
+    "yearlyHotSpring": 1,					  
+    "yearlyGasCooking": 1,					  
+    "yearlyBanana": 1						  
+  }
+}

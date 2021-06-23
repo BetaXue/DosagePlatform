@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.evision.dosage.mapper.NaturalRadiationMapper">
+    <resultMap id="BaseResultMap" type="com.evision.dosage.pojo.entity.NaturalRadiation">
+        <result column="col_number" property="colNumber" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+        <result column="dose_rate" property="doseRate" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="annual_dose" property="annualDose" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER" />
+        <result column="disabled" property="disabled" jdbcType="INTEGER" />
+        <result column="deleted" property="deleted" jdbcType="INTEGER" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        col_number,
+        dose_rate,
+        annual_dose,
+        create_time,
+        update_time,
+        user_id,
+        disabled,
+        deleted
+    </sql>
+    <select id="getNaturalRadiations" parameterType="com.evision.dosage.pojo.entity.NaturalRadiation"
+            resultMap="BaseResultMap">
+        SELECT id, <include refid="Base_Column_List"/> FROM natural_radiation WHERE DISABLED = 1 AND deleted = 0  ORDER BY col_number
+    </select>
+
+    <insert id="insertNaturalRadiations" parameterType="java.util.List">
+        INSERT INTO natural_radiation  (
+        <include refid="Base_Column_List"/>
+        ) VALUES
+        <foreach collection="naturalRadiations" item="item" index="index" separator=",">
+            (
+            #{item.colNumber},
+            #{item.doseRate},
+            #{item.annualDose},
+            sysdate(),
+            sysdate(),
+            #{item.userId},
+            #{item.disabled},
+            #{item.deleted}
+            )
+        </foreach>
+    </insert>
+
+    <insert id="insertNaturalRadiation" parameterType="com.evision.dosage.pojo.entity.NaturalRadiation">
+        INSERT INTO natural_radiation  (
+        <include refid="Base_Column_List"/>
+        ) VALUES (
+        #{naturalRadiation.colNumber},
+        #{naturalRadiation.doseRate},
+        #{naturalRadiation.annualDose},
+        sysdate(),
+        sysdate(),
+        #{naturalRadiation.userId},
+        #{naturalRadiation.disabled},
+        #{naturalRadiation.deleted}
+        )
+    </insert>
+
+    <update id="updateNaturalRadiation" parameterType="com.evision.dosage.pojo.entity.NaturalRadiation">
+        UPDATE natural_radiation SET disabled = 0 WHERE col_number = #{naturalRadiation.colNumber} AND disabled = 1
+    </update>
+
+    <select id="getHistory" resultMap="BaseResultMap">
+        SELECT id, <include refid="Base_Column_List"/> FROM natural_radiation
+        WHERE disabled = 0 AND deleted = 0 AND col_number = #{colNumber} ORDER BY update_time DESC
+    </select>
+
+</mapper>

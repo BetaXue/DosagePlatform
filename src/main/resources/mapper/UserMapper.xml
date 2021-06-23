@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.evision.dosage.mapper.UserMapper">
+    <resultMap id="BaseResultMap" type="com.evision.dosage.pojo.entity.user.UserEntity">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="username" property="username" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="role_id" property="roleId" jdbcType="INTEGER"/>
+        <result column="operator_id" property="operatorId" jdbcType="INTEGER"/>
+        <result column="valid" property="valid" jdbcType="INTEGER"/>
+        <result column="is_activated" property="isActivated" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,
+        username,
+        password,
+        role_id,
+        operator_id,
+        valid,
+        is_activated,
+        create_time,
+        update_time
+    </sql>
+    <select id="queryUsersById" parameterType="com.evision.dosage.pojo.entity.user.UserEntity"
+            resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM user
+        WHERE id = #{id} AND valid = 1
+    </select>
+    <select id="queryUsersByName" parameterType="com.evision.dosage.pojo.entity.user.UserEntity"
+            resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM user
+        WHERE username = #{username}
+    </select>
+    <insert id="insertUser" parameterType="com.evision.dosage.pojo.entity.user.UserEntity">
+        INSERT user (
+        <include refid="Base_Column_List"/>
+        ) VALUES (
+        #{id},
+        #{username},
+        #{password},
+        #{roleId},
+        #{operatorId},
+        #{valid},
+        #{isActivated},
+        sysdate(),
+        sysdate()
+        )
+    </insert>
+
+    <select id="getPageUser" resultType="com.evision.dosage.pojo.entity.user.UserEntity">
+        SELECT
+        *
+        FROM
+        user
+    </select>
+    <update id="updatePassword">
+        update user
+        set password = #{password},
+        is_activated = #{isActivated}
+        where id = #{userId}
+    </update>
+    <delete id="delete">
+        delete from user
+        where id = #{userId}
+    </delete>
+    <update id="stop">
+        update user
+        set valid = 0,
+        where user_name = #{name}
+    </update>
+    <update id="start">
+        update user
+        set valid = 1,
+        where user_name = #{name}
+    </update>
+    <select id="validateUsername" resultType="int">
+        select count(*) from user where username = #{username}
+    </select>
+</mapper>
